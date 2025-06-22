@@ -1,10 +1,18 @@
 // src/utils/timeline.js
 import { estadoSimulador } from '../simulador.js';
 
-export function mostrarTimeline() {
-  const ctx = document.getElementById('timeline-chart').getContext('2d');
+let timelineChart = null;
 
-  // Agrupar por proceso continuo
+export function mostrarTimeline() {
+  const canvas = document.getElementById('timeline-chart');
+  const ctx = canvas.getContext('2d');
+
+  // 🔄 Destruir gráfico anterior si existe
+  if (timelineChart) {
+    timelineChart.destroy();
+  }
+
+  // === Agrupar bloques de ejecución continuos ===
   const bloques = [];
   let actual = null;
 
@@ -18,8 +26,9 @@ export function mostrarTimeline() {
   }
   if (actual) bloques.push(actual);
 
-  // Crear dataset
+  // === Crear dataset para Chart.js ===
   const procesosUnicos = [...new Set(bloques.map(b => b.proceso))];
+
   const data = {
     labels: procesosUnicos,
     datasets: [{
@@ -35,14 +44,21 @@ export function mostrarTimeline() {
     }]
   };
 
-  const chart = new Chart(ctx, {
+  timelineChart = new Chart(ctx, {
     type: 'bar',
     data,
     options: {
       indexAxis: 'y',
       scales: {
-        x: { beginAtZero: true, stacked: true },
-        y: { stacked: true }
+        x: {
+          beginAtZero: true,
+          stacked: true,
+          title: { display: true, text: 'Tiempo (ms)' }
+        },
+        y: {
+          stacked: true,
+          title: { display: true, text: 'Procesos' }
+        }
       },
       plugins: {
         legend: { display: false },

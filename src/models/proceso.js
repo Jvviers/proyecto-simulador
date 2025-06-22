@@ -1,3 +1,4 @@
+//src/models/proceso.js
 export default class Proceso {
   constructor(nombre, llegada, burst, memoria, prioridad) {
     this.nombre = nombre;

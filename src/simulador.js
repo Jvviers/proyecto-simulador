@@ -5,6 +5,7 @@ import { seleccionarSiguienteRR } from './schedulers/rr_temp.js';
 export const estadoSimulador = {
   reloj: 0,
   quantum: 5,
+  quantumRestante: 0,
   enEjecucion: false,
   modoMultinivel: false,
   procesos: [],
@@ -56,23 +57,40 @@ export function tickSimulador() {
     est.colaListos = est.colaListos.filter(p => p !== est.procesoActual);
     console.log(`✅ ${est.procesoActual.nombre} finalizado en t=${est.reloj}`);
     est.procesoActual = null;
+    est.quantumRestante = 0;
   }
 
-  // === 3. Seleccionar nuevo proceso si no hay uno ===
+  // === 3. Verificar fin de quantum (solo RR) ===
+  if (est.procesoActual && est.algoritmo === 'RR' && est.quantumRestante === 0) {
+    console.log(`⏱ Quantum agotado para ${est.procesoActual.nombre}`);
+    est.procesoActual.actualizarEstado('listo');
+    est.colaListos.push(est.procesoActual);
+    est.procesoActual = null;
+  }
+
+  // === 4. Seleccionar nuevo proceso si no hay uno ===
   if (!est.procesoActual) {
     if (est.modoMultinivel) {
       if (est.colaAlta.length > 0) {
-        est.procesoActual = seleccionarSiguienteRR(est.colaAlta, est.quantum);
+        est.procesoActual = seleccionarSiguienteRR(est.colaAlta);
+        est.colaAlta.shift();
+        est.quantumRestante = est.quantum;
         console.log(`▶️ Ejecutando ${est.procesoActual.nombre} desde colaAlta`);
       } else if (est.colaBaja.length > 0) {
         est.procesoActual = seleccionarSiguienteSJF(est.colaBaja);
+        est.colaBaja = est.colaBaja.filter(p => p !== est.procesoActual);
+        est.quantumRestante = 0;
         console.log(`▶️ Ejecutando ${est.procesoActual.nombre} desde colaBaja`);
       }
     } else {
       if (est.algoritmo === 'SJF') {
         est.procesoActual = seleccionarSiguienteSJF(est.colaListos);
+        est.colaListos = est.colaListos.filter(p => p !== est.procesoActual);
+        est.quantumRestante = 0;
       } else {
-        est.procesoActual = seleccionarSiguienteRR(est.colaListos, est.quantum);
+        est.procesoActual = seleccionarSiguienteRR(est.colaListos);
+        est.colaListos.shift();
+        est.quantumRestante = est.quantum;
       }
       if (est.procesoActual)
         console.log(`▶️ Ejecutando ${est.procesoActual.nombre} desde colaListos (${est.algoritmo})`);
@@ -84,12 +102,15 @@ export function tickSimulador() {
     }
   }
 
-  // === 4. Ejecutar proceso actual ===
+  // === 5. Ejecutar proceso actual ===
   if (est.procesoActual) {
     est.procesoActual.tickEjecucion();
+    if (est.algoritmo === 'RR') {
+      est.quantumRestante--;
+    }
   }
 
-  // === 5. Acumular espera ===
+  // === 6. Acumular espera ===
   const enEspera = est.modoMultinivel
     ? [...est.colaAlta, ...est.colaBaja]
     : est.colaListos;
@@ -100,7 +121,7 @@ export function tickSimulador() {
     }
   });
 
-  // === 6. Timeline ===
+  // === 7. Timeline ===
   est.historialEjecucion.push({
     tiempo: est.reloj,
     proceso: est.procesoActual?.nombre || 'IDLE'
