@@ -1,4 +1,3 @@
-// src/utils/timeline.js
 import { estadoSimulador } from '../simulador.js';
 
 let timelineChart = null;
@@ -7,7 +6,7 @@ export function mostrarTimeline() {
   const canvas = document.getElementById('timeline-chart');
   const ctx = canvas.getContext('2d');
 
-  // 🔄 Destruir gráfico anterior si existe
+  // Destruir gráfico anterior si existe
   if (timelineChart) {
     timelineChart.destroy();
   }

@@ -1,4 +1,3 @@
-//src/ui/controls.js
 import { estadoSimulador, tickSimulador } from '../simulador.js';
 import Proceso from '../models/proceso.js';
 import { dibujarMemoria } from './memoriaCanvas.js';

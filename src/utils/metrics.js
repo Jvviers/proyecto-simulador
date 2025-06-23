@@ -1,7 +1,7 @@
 import { estadoSimulador } from '../simulador.js';
 
 export function mostrarMetricas() {
-    console.log('📦 Terminados:', estadoSimulador.procesosTerminados);
+    console.log('Terminados:', estadoSimulador.procesosTerminados);
     const procesos = estadoSimulador.procesosTerminados;
     const container = document.getElementById('metrics-table');
     container.innerHTML = '';

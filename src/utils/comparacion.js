@@ -1,4 +1,3 @@
-// src/utils/comparacion.js
 import Proceso from '../models/proceso.js';
 import { Memoria } from '../models/memoria.js';
 import { seleccionarSiguienteSJF } from '../schedulers/sjf_temp.js';

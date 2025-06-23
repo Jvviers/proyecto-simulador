@@ -1,4 +1,3 @@
-//src/models/proceso.js
 export default class Proceso {
   constructor(nombre, llegada, burst, memoria, prioridad) {
     this.nombre = nombre;
@@ -6,9 +5,9 @@ export default class Proceso {
     this.burst = burst;
     this.burstRestante = burst;
     this.memoria = memoria;
-    this.prioridad = prioridad; // 🆕 NUEVO
+    this.prioridad = prioridad; 
 
-    this.estado = 'nuevo'; // nuevo, listo, ejecutando, terminado, swapped
+    this.estado = 'nuevo'; 
 
     this.tInicio = null;
     this.tFin = null;

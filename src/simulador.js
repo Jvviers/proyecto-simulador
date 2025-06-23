@@ -27,20 +27,20 @@ export function tickSimulador() {
   est.procesos.forEach(p => {
     if (p.llegada <= est.reloj && p.estado === 'nuevo') {
       const asignado = est.memoria.asignar(p);
-      console.log(`⏰ Proceso ${p.nombre} llegó en t=${est.reloj} | Asignado: ${asignado}`);
+      console.log(`Proceso ${p.nombre} llegó en t=${est.reloj} | Asignado: ${asignado}`);
 
       if (!p.enSwap && asignado) {
         if (est.modoMultinivel) {
           if (p.prioridad === 0) {
             est.colaAlta.push(p);
-            console.log(`🟢 ${p.nombre} → colaAlta`);
+            console.log(`${p.nombre} → colaAlta`);
           } else {
             est.colaBaja.push(p);
-            console.log(`🔵 ${p.nombre} → colaBaja`);
+            console.log(`${p.nombre} → colaBaja`);
           }
         } else {
           est.colaListos.push(p);
-          console.log(`🟡 ${p.nombre} → colaListos`);
+          console.log(`${p.nombre} → colaListos`);
         }
       }
     }
@@ -55,14 +55,14 @@ export function tickSimulador() {
     est.colaAlta = est.colaAlta.filter(p => p !== est.procesoActual);
     est.colaBaja = est.colaBaja.filter(p => p !== est.procesoActual);
     est.colaListos = est.colaListos.filter(p => p !== est.procesoActual);
-    console.log(`✅ ${est.procesoActual.nombre} finalizado en t=${est.reloj}`);
+    console.log(`${est.procesoActual.nombre} finalizado en t=${est.reloj}`);
     est.procesoActual = null;
     est.quantumRestante = 0;
   }
 
   // === 3. Verificar fin de quantum (solo RR) ===
   if (est.procesoActual && est.algoritmo === 'RR' && est.quantumRestante === 0) {
-    console.log(`⏱ Quantum agotado para ${est.procesoActual.nombre}`);
+    console.log(`Quantum agotado para ${est.procesoActual.nombre}`);
     est.procesoActual.actualizarEstado('listo');
     est.colaListos.push(est.procesoActual);
     est.procesoActual = null;
@@ -75,12 +75,12 @@ export function tickSimulador() {
         est.procesoActual = seleccionarSiguienteRR(est.colaAlta);
         est.colaAlta.shift();
         est.quantumRestante = est.quantum;
-        console.log(`▶️ Ejecutando ${est.procesoActual.nombre} desde colaAlta`);
+        console.log(`Ejecutando ${est.procesoActual.nombre} desde colaAlta`);
       } else if (est.colaBaja.length > 0) {
         est.procesoActual = seleccionarSiguienteSJF(est.colaBaja);
         est.colaBaja = est.colaBaja.filter(p => p !== est.procesoActual);
         est.quantumRestante = 0;
-        console.log(`▶️ Ejecutando ${est.procesoActual.nombre} desde colaBaja`);
+        console.log(`Ejecutando ${est.procesoActual.nombre} desde colaBaja`);
       }
     } else {
       if (est.algoritmo === 'SJF') {
@@ -93,7 +93,7 @@ export function tickSimulador() {
         est.quantumRestante = est.quantum;
       }
       if (est.procesoActual)
-        console.log(`▶️ Ejecutando ${est.procesoActual.nombre} desde colaListos (${est.algoritmo})`);
+        console.log(`Ejecutando ${est.procesoActual.nombre} desde colaListos (${est.algoritmo})`);
     }
 
     if (est.procesoActual) {

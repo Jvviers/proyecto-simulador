@@ -35,7 +35,7 @@ export class Memoria {
             }
         }
 
-        // No hay espacio → enviar a swap solo si aún no está
+        // No hay espacio se envia a swap solo si aún no está
         if (!proceso.enSwap) {
             proceso.enSwap = true;
             proceso.actualizarEstado('swapped');
@@ -68,7 +68,7 @@ export class Memoria {
             if (actual.libre && siguiente.libre) {
                 actual.tamaño += siguiente.tamaño;
                 this.bloques.splice(i + 1, 1);
-                i--; // Retrocede para verificar fusión en cadena
+                i--; 
             }
         }
     }
