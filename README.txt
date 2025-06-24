@@ -2,7 +2,7 @@ Para su utilización, dado que la interfaz no es muy amigable, es importante seg
 
 Pasos:
 
-- Ejegir nombre del proceso
+- Elegir nombre del proceso
 - Tiempo de llegada
 - Burst
 - Memoria
@@ -17,6 +17,15 @@ alta o baja. Ahí no importa elegir algoritmo de planificación ya que, en el al
 - Luego, seleccionar el quantum que deseemos. 
 
 Se comprende que la interfaz no es muy amigable, debido a que nos enfocamos en el algoritmo como tal.
+
+Se solicita que en caso de tener problemas con Electrón, instalar las dependencias con: 
+
+pnpm install 
+pnpm approve-builds
+
+y ejecutar normal con: 
+
+npm start
 
 
 
